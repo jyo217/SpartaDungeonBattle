@@ -17,8 +17,9 @@ namespace SpartaDungeonBattle
         public Inventory()
         {
             ItemList = new List<Item>();
-            ItemList.Add(new Equipment("무쇠갑옷", 100, "무쇠로 만들어져 튼튼한 갑옷입니다.", 0, 5));
-            ItemList.Add(new Equipment("낡은 검", 100, "쉽게 볼 수 있는 낡은 검 입니다.", 2, 0));
+            // 임시방편으로 이쁘게 보이기 위하여, 아이템 이름을 작성하실땐 영문자기준으로 10칸을 채웠습니다.
+            ItemList.Add(new Equipment("무쇠갑옷  ", 100, "무쇠로 만들어져 튼튼한 갑옷입니다.", 0, 5));
+            ItemList.Add(new Equipment("낡은 검   ", 100, "쉽게 볼 수 있는 낡은 검 입니다.", 2, 0));
             ItemList.Add(Consumption.MakePotion());
         }
         public Inventory(List<Item> itemList) { ItemList = itemList; }

@@ -120,7 +120,7 @@ public static class StateManager
         Console.WriteLine("[인벤토리]");
         Console.WriteLine("보유중인 장비,포션을 관리할 수 있습니다.\n");
         Console.WriteLine("[아이템 목록]");
-        Console.WriteLine("    아이템 이름          효과                     설명               ");
+        Console.WriteLine("\n***아이템 이름  >>  능력치  >>  아이템 설명***\n");
         for (int i = 0; i < Character.CurrentCharacter.Inventory.Count; i++)
         {
             Item item = Character.CurrentCharacter.Inventory[i];
@@ -128,12 +128,15 @@ public static class StateManager
             {
                 case ItemType.CONSUMPTION :
                     Consumption consumption = item as Consumption;
-                    Console.WriteLine(" " + consumption.ItemName.PadRight(10, ' ') + "  |  " + consumption.Description);
+                    Console.WriteLine("    " + consumption.ItemName + "  >>  " + consumption.Description);
                     break;
                 case ItemType.EQUIPMENT :
                     Equipment equipment = item as Equipment;
-                    Console.WriteLine(" " + equipment.ItemName.PadRight(10, ' ') + "  |  공격력 : "+ equipment.Attack.ToString().PadRight(5, ' ') 
-                                        +"  방어력 : " + equipment.Defense.ToString().PadRight(5, ' ') + "  |  " + item.Description);
+                    Console.Write(equipment.OnEquipped ? "[E] " : "    ");
+                    Console.Write(equipment.ItemName);
+                    if (equipment.Attack > 0) Console.Write("  >>  공격력 : " + equipment.Attack.ToString().PadRight(3, ' '));
+                    if (equipment.Defense> 0) Console.Write("  >>  방어력 : " + equipment.Defense.ToString().PadRight(3, ' '));
+                    Console.WriteLine("  >>  " + item.Description);
                     break;
                 default:
                     break;
