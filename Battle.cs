@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 
 public class Battle
 {
-    public static Battle? CurrentBattle { get; private set; }
+    public static Battle CurrentBattle { get; private set; }
     public List<Monster> Monsters { get; private set; }
     private BattlePhase _battlePhase;
+    public bool isBattleEnd { get { return _battlePhase == BattlePhase.BATTLE_OUT; } }
     bool isAllDead
     {
         get
@@ -19,6 +20,8 @@ public class Battle
             return true;
         }
     }
+
+    private Action resultCallback;
 
     public Battle()
     {
@@ -30,14 +33,18 @@ public class Battle
 
     public void Phase()
     {
-        Console.WriteLine($"Battle!!{(_battlePhase == BattlePhase.BATTLE_END ? "" : " - Result")}");
+        DisplayTop();
         switch (_battlePhase)
         {
             case BattlePhase.PLAYER_BATTLE:
-
+                DisplayMonsters();
+                DisplayCharacterInfo();
+                Process_PlayerBattle();
                 break;
             case BattlePhase.PLAYER_ATTACK:
-
+                DisplayMonsters(true);
+                DisplayCharacterInfo();
+                Process_PlayerAttack();
                 break;
             case BattlePhase.PLAYER_SKILL:
 
@@ -60,12 +67,18 @@ public class Battle
         }
     }
 
-    private void DisplayMonsters()
+    private void DisplayTop()
+    {
+        Console.Clear();
+        Console.WriteLine($"Battle!!{(_battlePhase != BattlePhase.BATTLE_END ? "" : " - Result")}\n");
+    }
+
+    private void DisplayMonsters(bool withNumbers = false)
     {
         int n = 0;
         foreach (Monster monster in Monsters)
         {
-            Console.WriteLine($"{++n} Lv.{monster.Level} {monster.Name}  {(monster.isDead ? "Dead" : $"HP {monster.HP}")}");
+            Console.WriteLine($"{(withNumbers ? $"{++n} => " : "")}Lv.{monster.Level} {monster.Name}  {(monster.isDead ? "Dead" : $"HP {monster.HP}")}");
         }
         Console.WriteLine();
     }
@@ -74,8 +87,62 @@ public class Battle
     {
         Console.WriteLine("[내정보]");
         Console.WriteLine($"Lv.{Character.CurrentCharacter.Level}  {Character.CurrentCharacter.Name}  ({Character.CurrentCharacter.ClassToString()})");
-        Console.WriteLine($"{Character.CurrentCharacter.HP}/{Character.CurrentCharacter.MaxHP}");
-        Console.WriteLine($"{Character.CurrentCharacter.MP}/{Character.CurrentCharacter.MaxMP}");
+        Console.WriteLine($"HP {Character.CurrentCharacter.HP}/{Character.CurrentCharacter.MaxHP}");
+        Console.WriteLine($"MP {Character.CurrentCharacter.MP}/{Character.CurrentCharacter.MaxMP}");
+        Console.WriteLine();
+    }
+
+    private void Process_PlayerBattle()
+    {
+        Console.WriteLine("1. 공격");
+        Console.WriteLine("2. 스킬");
+        Console.WriteLine("3. 아이템 사용");
+        Console.WriteLine();
+        Console.WriteLine("원하시는 행동을 입력해주세요.");
+        Console.Write(">> ");
+
+        int input = StateManager.CheckValidInput(1, 3);
+        switch (input)
+        {
+            case 1:
+                _battlePhase = BattlePhase.PLAYER_ATTACK;
+                break;
+            case 2:
+                _battlePhase = BattlePhase.PLAYER_SKILL;
+                break;
+            case 3:
+                _battlePhase = BattlePhase.PLAYER_ITEMSELECT;
+                break;
+        }
+    }
+
+    private void Process_PlayerAttack()
+    {
+        Console.WriteLine("공격하려는 몬스터의 번호를 입력해주세요.");
+        Console.WriteLine("0. 돌아가기\n");
+        Console.Write(">> ");
+
+        int input = -1;
+        while (true)
+        {
+            input = StateManager.CheckValidInput(0, Monsters.Count) - 1;
+            if (input == -1)
+            {
+                _battlePhase = BattlePhase.PLAYER_BATTLE;
+                return;
+            }
+            if (Monsters[input].isDead) Console.WriteLine("잘못된 입력입니다.");
+            else break;
+        }
+
+        //공격 함수
+        DisplayTop();
+        Character.CurrentCharacter.NormalAttack(Monsters[input]);
+
+        Console.WriteLine("\n0.다음\n");
+        Console.Write(">> ");
+        StateManager.CheckValidInput(0, 0);
+        _battlePhase = BattlePhase.MONSTER_ACTION;
     }
 
     private void CreateMonsters()
@@ -105,4 +172,5 @@ enum BattlePhase
     PLAYER_ACTIONRESULT,
     MONSTER_ACTION,
     BATTLE_END,
+    BATTLE_OUT,
 }

@@ -45,7 +45,7 @@ public static class StateManager
                     Manage_Equipment();
                     break;
                 case GameState.BATTLE:
-
+                    StartBattle();
                     break;
                 default:
                     Console.WriteLine("State에 맞는 함수를 설정해주지 않았습니다.");
@@ -298,7 +298,16 @@ public static class StateManager
         CurrentState = GameState.MANAGE_EQUIPMENT;
     }
 
-    static int CheckValidInput(int min, int max)
+    static void StartBattle()
+    {
+        Battle currentBattle = new Battle();
+        while (currentBattle.isBattleEnd == false)
+        {
+            currentBattle.Phase();
+        }
+    }
+
+    public static int CheckValidInput(int min, int max)
     {
         while (true)
         {
