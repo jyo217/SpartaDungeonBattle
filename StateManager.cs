@@ -82,15 +82,36 @@ public static class StateManager
 
     static void Display_View_Status()
     {
+        List<Equipment> equipped = Character.CurrentCharacter.ItemOnEquipped;
+        int atk = 0;
+        int def = 0;
+        string equippedList = "";
+
+        //장착한 장비의 능력치를 합산 후, 이에 따른 능력치 변동을 표시함.
+        foreach (Equipment e in equipped)
+        {
+            atk += e.Attack;
+            def += e.Defense;
+            equippedList += $"||{e.ItemName}|| ";
+        }
+
         Console.Clear();
         Console.WriteLine("[상태 보기]");
         Console.WriteLine("캐릭터의 정보가 표시됩니다.\n");
         Console.WriteLine($"Lv. {Character.CurrentCharacter.Level.ToString("D2")}");
         Console.WriteLine($"{Character.CurrentCharacter.Name} ( {Character.CurrentCharacter.ClassToString()} )");
-        Console.WriteLine($"공격력 : {Character.CurrentCharacter.Attack}");
-        Console.WriteLine($"방어력 : {Character.CurrentCharacter.Defense}");
+
+        Console.Write($"공격력 : {Character.CurrentCharacter.Attack} ");
+        if (atk != 0) { Console.Write($" (+ {atk})"); }
+        Console.WriteLine();
+
+        Console.Write($"방어력 : {Character.CurrentCharacter.Defense}");
+        if (def != 0) { Console.Write($" (+ {def})"); }
+        Console.WriteLine() ;
+
         Console.WriteLine($"체 력 : {Character.CurrentCharacter.HP}");
         Console.WriteLine($"Gold : {Character.CurrentCharacter.Gold}\n");
+        Console.WriteLine($"착용한 아이템 : {equippedList}");
     }
 
     static void Display_View_Inventory()
