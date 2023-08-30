@@ -30,11 +30,13 @@ namespace SpartaDungeonBattle
 		// Equipment 고유 필드
 		public int Attack { get; }
         public int Defense { get; }
+        public bool OnEquipped { get; set; }
         
 		public Equipment(ItemType itemType, string itemName, int gold, string description, int atk, int def) : base(itemType, itemName, gold, description)
         {
             Attack = atk;
             Defense = def;
+            OnEquipped = false;
         }
     }
     public class Consumption : Item

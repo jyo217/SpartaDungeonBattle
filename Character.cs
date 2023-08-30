@@ -33,20 +33,23 @@ namespace SpartaDungeonBattle
         public Character()
         {
             CurrentCharacter = this;
-            this.Name = "";
+            Level = 1;
+            Name = "";
             Class = ClassType.WARRIOR;
-            this.Gold = 0;
-            this.Exp = 0;
+            Gold = 0;
+            Exp = 0;
+            Inventory = new Inventory();
+            ItemOnEquipped = new List<Equipment>();
         }
         
         public Character(string name, ClassType classType, int gold, int exp) 
         {
             CurrentCharacter = this;
-            this.Name = name;
+            Name = name;
             Class = classType;
             SetClass(classType);
             this.Gold = gold;
-            this.Exp = exp;
+            Exp = exp;
         }
 
         public void UseSkill(Skill skill) { }
