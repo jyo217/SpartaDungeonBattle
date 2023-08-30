@@ -36,6 +36,7 @@ namespace SpartaDungeonBattle
         /// </summary>
         public void ManageEquipment(int index)
         {
+            Character character = Character.CurrentCharacter;
             //이걸 장비 타입으로 캐스팅 시도
             Equipment equipment = ItemList[index] as Equipment;
 
@@ -45,13 +46,13 @@ namespace SpartaDungeonBattle
                 //장착 중인 아이템이라면 장착 상태 변경 및 장착 아이템 리스트에서 제거
                 if(equipment.OnEquipped)
                 {
-                    Character.CurrentCharacter.ItemOnEquipped.Remove(equipment);
+                    character.EquipItem(equipment);
                     equipment.OnEquipped = false;
                 }
                 //미장착 아이템이라면 장착 상태 변경 및 장착 아이템 리스트에 추가
                 else
                 {
-                    Character.CurrentCharacter.ItemOnEquipped.Add(equipment);
+                    character.EquipItem(equipment);
                     equipment.OnEquipped = true;
                 }
             }

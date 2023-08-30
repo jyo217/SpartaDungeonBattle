@@ -200,22 +200,23 @@ public static class StateManager
         Console.WriteLine("[장착 관리]");
         Console.WriteLine("장착 또는 장착 해제할 아이템을 선택해주세요.\n");
         Console.WriteLine("[아이템 목록]");
-        Console.WriteLine("\n***아이템 이름  >>  공격력  >>  방어력  >>  아이템 설명***\n");
+        Console.WriteLine("\n***아이템 이름  >>  능력치  >>  아이템 설명***\n");
 
         int equipmentCount = 0;
         List<int> items = new List<int>();
 
         Equipment e;//캐스팅용 임시 객체
-
+        string itemInfo = "";//출력할 아이템 정보
         for (int i = 0; i < Character.CurrentCharacter.Inventory.Count; i++)
         {
+            itemInfo = "";
             //장비만 골라서 출력
             if (Character.CurrentCharacter.Inventory.ItemList[i].ItemType == ItemType.EQUIPMENT)
             {
                 //해당 장비 아이템의 인덱스 저장
                 items.Add(i);
                 //번호
-                Console.Write($"{i + 1}. ");
+                itemInfo += $"{i + 1}. ";
 
                 e = Character.CurrentCharacter.Inventory.ItemList[i] as Equipment;
 
@@ -224,13 +225,21 @@ public static class StateManager
                     //장착 중인 장비는 [E] 표시가 추가로 붙음
                     if (e.OnEquipped)
                     {
-                        Console.Write("[E] ");
+                        itemInfo += "[E] ";
                     }
                 }
                 else { Console.WriteLine("\nItem => Equipment 캐스팅 오류!!!\n"); }
 
-                Console.WriteLine($"{e.ItemName}  >>  {e.Attack}  >>  {e.Defense}  >>  {e.Description}");
+                itemInfo += $"{e.ItemName})";
+
+                //0 이하인 능력치는 표기하지 않음
+                itemInfo += e.Attack > 0 ? $"  >>  + {e.Attack} ATK" : "";
+                itemInfo += e.Defense > 0 ? $"  >>  + {e.Defense} DEF" : "";
+
+                itemInfo += $"  >>  {e.Description}";
                 equipmentCount++;
+
+                Console.WriteLine(itemInfo);
             }
         }
 
