@@ -56,7 +56,25 @@ namespace SpartaDungeonBattle
 
         public void UseItem(Consumption consumption) { }
 
-        public void EquipItem(Equipment equipment) { }
+        public void EquipItem(Equipment equipment) 
+        {
+            //장착 중인 아이템이라면 해제, 그만큼 능력치 감소
+            if (ItemOnEquipped.Contains(equipment))
+            {
+                ItemOnEquipped.Remove(equipment);
+
+                this.Attack -= equipment.Attack;
+                this.Defense -= equipment.Defense;
+            }
+            //미장착 아이템이라면 장착, 그만큼 능력치 증가
+            else
+            {
+                ItemOnEquipped.Add(equipment);
+
+                this.Attack += equipment.Attack;
+                this.Defense += equipment.Defense;
+            }
+        }
 
         /// <summary>
         /// 경험치 증가 및 레벨업 메소드.  
