@@ -14,6 +14,6 @@ namespace SpartaDungeonBattle
         /// <summary>
         /// 필요에 따라 편집
         /// </summary>
-        public Inventory(List<Item> itemList) { ItemList = ItemList; }
+        public Inventory(List<Item> itemList) { ItemList = itemList; }
     }
 }
