@@ -67,7 +67,7 @@ namespace SpartaDungeonBattle
 
     public enum ClassType
     {
-        WARRIOR,
+        WARRIOR = 1,
         ARCHER,
         MAGICIAN,
         CLERIC
