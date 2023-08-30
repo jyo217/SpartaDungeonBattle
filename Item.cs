@@ -48,12 +48,19 @@ namespace SpartaDungeonBattle
             if (monster != null) ItemToMonster.Invoke(monster);
         }
 
-        Action<Character> ItemToCharacter;​
-		Action<Monster> ItemToMonster;
+        Action<Character>? ItemToCharacter;​
+		Action<Monster>? ItemToMonster;
 ​
-		public Consumption(ItemType itemType, string itemName, int gold, string description, ItemTarget target) : base(itemType, itemName, gold, description)
+		public Consumption(string itemName, int gold, string description, ItemTarget target) : base(ItemType.Consumption, itemName, gold, description)
         {
             Target = target;
+        }
+
+        public static Consumption MakePotion()
+        {
+            Consumption potion = new Consumption("붉은 포션", 20, "HP를 20 회복시킵니다.", ItemTarget.ToCharacter);
+            potion.ItemToCharacter += (Character character) => { character.HP += 20; if (character.HP > character.MaxHP) character.HP = character.MaxHP };
+            return potion;
         }
     }
 }

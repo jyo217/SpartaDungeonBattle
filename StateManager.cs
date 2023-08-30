@@ -94,7 +94,7 @@ public static class StateManager
         Console.WriteLine("보유중인 장비,포션을 관리할 수 있습니다.\n");
         Console.WriteLine("[아이템 목록]");
         Console.WriteLine("    아이템 이름          효과                     설명               ");
-        for (int i = 0; i < CurrentCharacter.Inventory.count; i++)
+        for (int i = 0; i < CurrentCharacter.Inventory.Count; i++)
         {
             //아이템 출력함수
         }
@@ -108,7 +108,7 @@ public static class StateManager
         Console.WriteLine("장착 또는 장착 해제할 아이템을 선택해주세요.\n");
         Console.WriteLine("[아이템 목록]");
         Console.WriteLine("    아이템 이름          효과                     설명               ");
-        for (int i = 0; i < CurrentCharacter.Inventory.count; i++)
+        for (int i = 0; i < CurrentCharacter.Inventory.Count; i++)
         {
             //아이템 출력함수
         }

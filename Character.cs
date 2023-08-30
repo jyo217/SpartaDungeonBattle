@@ -16,8 +16,10 @@ namespace SpartaDungeonBattle
         public List<Equipment> ItemOnEquipped { get; private set; }
         public int Attack { get; private set; }
         public int Defense { get; private set; }
-        public int HP { get; private set; }
-        public int MP { get; private set; }
+        public int HP { get; set; }
+        public int MaxHP { get; private set; }
+        public int MP { get; set; }
+        public int MaxMP { get; private set; }
         public int Gold { get; private set; }
         public int Exp { get; private set; }
         public Inventory Inventory { get; private set; }
@@ -63,6 +65,10 @@ namespace SpartaDungeonBattle
 
                     this.Attack += 1;
                     this.Defense += 1;
+                    this.MaxHP += 10;
+                    this.MaxMP += 10;
+                    this.HP = MaxHP;
+                    this.MaxMP = MaxMP;
                 }
             }
         }
@@ -78,32 +84,40 @@ namespace SpartaDungeonBattle
                     {
                         Attack = 10;
                         Defense = 10;
-                        HP = 100;
-                        MP = 50;
+                        MaxHP = 100;
+                        HP = MaxHP;
+                        MaxMP = 50;
+                        MP = MaxMP;
                         break;
                     }
                 case ClassType.ARCHER:
                     {
                         Attack = 10;
                         Defense = 6;
-                        HP = 80;
-                        MP = 60;
+                        MaxHP = 80;
+                        HP = MaxHP;
+                        MaxMP = 60;
+                        MP = MaxMP;
                         break;
                     }
                 case ClassType.MAGICIAN:
                     {
                         Attack = 6;
                         Defense = 4;
-                        HP = 60;
-                        MP = 90;
+                        MaxHP = 60;
+                        HP = MaxHP;
+                        MaxMP = 90;
+                        MP = MaxMP;
                         break;
                     }
                 case ClassType.CLERIC:
                     {
                         Attack = 8;
                         Defense = 8;
-                        HP = 80;
-                        MP = 70;
+                        MaxHP = 80;
+                        HP = MaxHP;
+                        MaxMP = 70;
+                        MP = MaxMP;
                         break;
                     }
             }
