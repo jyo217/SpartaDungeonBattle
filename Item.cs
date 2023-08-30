@@ -42,17 +42,14 @@ namespace SpartaDungeonBattle
         public ItemTarget Target { get; }
 
         // Consumption 고유 메서드
-        public void ItemFunc()
+        public void ItemFunc(Character? character, Monster? monster)
         {
+            if (character != null) ItemToCharacter.Invoke(character);
+            if (monster != null) ItemToMonster.Invoke(monster);
         }
-​
-		public void Itemfunc(Monster monster)
-        {
-        }
-​
-		public void Itemfunc(Character character)
-        {
-        }
+
+        Action<Character> ItemToCharacter;​
+		Action<Monster> ItemToMonster;
 ​
 		public Consumption(ItemType itemType, string itemName, int gold, string description, ItemTarget target) : base(itemType, itemName, gold, description)
         {
