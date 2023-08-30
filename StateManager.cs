@@ -42,8 +42,7 @@ public static class StateManager
                     Process_View_Inventory();
                     break;
                 case GameState.MANAGE_EQUIPMENT:
-                    Display_Manage_Equipment();
-                    Process_Manage_Equipment();
+                    Manage_Equipment();
                     break;
                 case GameState.BATTLE:
 
@@ -119,20 +118,6 @@ public static class StateManager
                     break;
             }
             
-        }
-        Console.WriteLine();
-    }
-
-    static void Display_Manage_Equipment()
-    {
-        Console.Clear();
-        Console.WriteLine("[장착 관리]");
-        Console.WriteLine("장착 또는 장착 해제할 아이템을 선택해주세요.\n");
-        Console.WriteLine("[아이템 목록]");
-        Console.WriteLine("    아이템 이름          효과                     설명               ");
-        for (int i = 0; i < Character.CurrentCharacter.Inventory.Count; i++)
-        {
-            //아이템 출력함수
         }
         Console.WriteLine();
     }
@@ -224,9 +209,52 @@ public static class StateManager
         }
     }
 
-    static void Process_Manage_Equipment()
+    static void Manage_Equipment()
     {
+        Console.Clear();
+        Console.WriteLine("[장착 관리]");
+        Console.WriteLine("장착 또는 장착 해제할 아이템을 선택해주세요.\n");
+        Console.WriteLine("[아이템 목록]");
+        Console.WriteLine("    아이템 이름          효과                     설명               ");
 
+        int equipmentCount = 0;
+        List<int> items = new List<int>();
+
+        Equipment e;//캐스팅용 임시 객체
+
+        for (int i = 0; i < Character.CurrentCharacter.Inventory.Count; i++)
+        {
+            //장비만 골라서 출력
+            if (Character.CurrentCharacter.Inventory[i].ItemType == ItemType.EQUIPMENT)
+            {
+                //해당 장비 아이템의 인덱스 저장
+                items.Add(i);
+                //번호
+                Console.Write($"{i + 1}. ");
+                if()
+                Console.Write("");
+                //아무튼 장비만 골라서 죄다 출력. 장착 중인 장비는 [E] 표시가 추가로 붙음
+                equipmentCount++;
+            }
+        }
+
+        if (equipmentCount <= 0) { Console.WriteLine("***인벤토리에 장비가 없습니다***"); }
+
+        Console.WriteLine("\n0. 인벤토리로 돌아가기\n");
+
+        Console.WriteLine("원하시는 행동을 입력해주세요.");
+        Console.Write(">> ");
+
+        int input = CheckValidInput(0, equipmentCount);
+
+        //0 을 입력받았다면 인벤토리 화면으로 이동
+        if (input == 0) { CurrentState = GameState.VIEW_INVENTORY; return; }
+
+        //해당 장비의 인덱스를 인벤토리 쪽의 장비 장착, 탈착 메소드에 넘기면서 호출
+        Character.CurrentCharacter.Inventory.ManageEquipment(items[input-1]);
+
+        //장착/탈착 완료 후 다음 입력 대기
+        CurrentState = GameState.MANAGE_EQUIPMENT;
     }
 
     static int CheckValidInput(int min, int max)
