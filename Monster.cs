@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace SpartaDungeonBattle
 {
-    internal class Monster
+    [Serializable]
+    public class Monster
     {
         public int Level { get; private set; }
         public string Name { get; private set; }
