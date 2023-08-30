@@ -60,7 +60,7 @@ namespace SpartaDungeonBattle
 
         public static Consumption MakePotion()
         {
-            Consumption potion = new Consumption("붉은 포션", 20, "HP를 20 회복시킵니다.", ItemTarget.ToCharacter);
+            Consumption potion = new Consumption("붉은 포션 ", 20, "HP를 20 회복시킵니다.", ItemTarget.ToCharacter);
             potion.ItemToCharacter += (Character character) => { character.HP += 20; if (character.HP > character.MaxHP) character.HP = character.MaxHP; };
             return potion;
         }

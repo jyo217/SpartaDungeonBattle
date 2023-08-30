@@ -82,15 +82,36 @@ public static class StateManager
 
     static void Display_View_Status()
     {
+        List<Equipment> equipped = Character.CurrentCharacter.ItemOnEquipped;
+        int atk = 0;
+        int def = 0;
+        string equippedList = "";
+
+        //장착한 장비의 능력치를 합산 후, 이에 따른 능력치 변동을 표시함.
+        foreach (Equipment e in equipped)
+        {
+            atk += e.Attack;
+            def += e.Defense;
+            equippedList += $"||{e.ItemName}|| ";
+        }
+
         Console.Clear();
         Console.WriteLine("[상태 보기]");
         Console.WriteLine("캐릭터의 정보가 표시됩니다.\n");
         Console.WriteLine($"Lv. {Character.CurrentCharacter.Level.ToString("D2")}");
         Console.WriteLine($"{Character.CurrentCharacter.Name} ( {Character.CurrentCharacter.ClassToString()} )");
-        Console.WriteLine($"공격력 : {Character.CurrentCharacter.Attack}");
-        Console.WriteLine($"방어력 : {Character.CurrentCharacter.Defense}");
+
+        Console.Write($"공격력 : {Character.CurrentCharacter.Attack} ");
+        if (atk != 0) { Console.Write($" (+ {atk})"); }
+        Console.WriteLine();
+
+        Console.Write($"방어력 : {Character.CurrentCharacter.Defense}");
+        if (def != 0) { Console.Write($" (+ {def})"); }
+        Console.WriteLine() ;
+
         Console.WriteLine($"체 력 : {Character.CurrentCharacter.HP}");
         Console.WriteLine($"Gold : {Character.CurrentCharacter.Gold}\n");
+        Console.WriteLine($"착용한 아이템 : {equippedList}");
     }
 
     static void Display_View_Inventory()
@@ -99,7 +120,7 @@ public static class StateManager
         Console.WriteLine("[인벤토리]");
         Console.WriteLine("보유중인 장비,포션을 관리할 수 있습니다.\n");
         Console.WriteLine("[아이템 목록]");
-        Console.WriteLine("    아이템 이름          효과                     설명               ");
+        Console.WriteLine("\n***아이템 이름  >>  능력치  >>  아이템 설명***\n");
         for (int i = 0; i < Character.CurrentCharacter.Inventory.Count; i++)
         {
             Item item = Character.CurrentCharacter.Inventory[i];
@@ -107,12 +128,15 @@ public static class StateManager
             {
                 case ItemType.CONSUMPTION :
                     Consumption consumption = item as Consumption;
-                    Console.WriteLine(" " + consumption.ItemName.PadRight(10, ' ') + "  |  " + consumption.Description);
+                    Console.WriteLine("    " + consumption.ItemName + "  >>  " + consumption.Description);
                     break;
                 case ItemType.EQUIPMENT :
                     Equipment equipment = item as Equipment;
-                    Console.WriteLine(" " + equipment.ItemName.PadRight(10, ' ') + "  |  공격력 : "+ equipment.Attack.ToString().PadRight(5, ' ') 
-                                        +"  방어력 : " + equipment.Defense.ToString().PadRight(5, ' ') + "  |  " + item.Description);
+                    Console.Write(equipment.OnEquipped ? "[E] " : "    ");
+                    Console.Write(equipment.ItemName);
+                    if (equipment.Attack > 0) Console.Write("  >>  공격력 : " + equipment.Attack.ToString().PadRight(3, ' '));
+                    if (equipment.Defense> 0) Console.Write("  >>  방어력 : " + equipment.Defense.ToString().PadRight(3, ' '));
+                    Console.WriteLine("  >>  " + item.Description);
                     break;
                 default:
                     break;
@@ -215,30 +239,50 @@ public static class StateManager
         Console.WriteLine("[장착 관리]");
         Console.WriteLine("장착 또는 장착 해제할 아이템을 선택해주세요.\n");
         Console.WriteLine("[아이템 목록]");
-        Console.WriteLine("    아이템 이름          효과                     설명               ");
+        Console.WriteLine("\n***아이템 이름  >>  능력치  >>  아이템 설명***\n");
 
         int equipmentCount = 0;
         List<int> items = new List<int>();
 
         Equipment e;//캐스팅용 임시 객체
-
+        string itemInfo = "";//출력할 아이템 정보
         for (int i = 0; i < Character.CurrentCharacter.Inventory.Count; i++)
         {
+            itemInfo = "";
             //장비만 골라서 출력
-            if (Character.CurrentCharacter.Inventory[i].ItemType == ItemType.EQUIPMENT)
+            if (Character.CurrentCharacter.Inventory.ItemList[i].ItemType == ItemType.EQUIPMENT)
             {
                 //해당 장비 아이템의 인덱스 저장
                 items.Add(i);
                 //번호
-                Console.Write($"{i + 1}. ");
-                if()
-                Console.Write("");
-                //아무튼 장비만 골라서 죄다 출력. 장착 중인 장비는 [E] 표시가 추가로 붙음
+                itemInfo += $"{i + 1}. ";
+
+                e = Character.CurrentCharacter.Inventory.ItemList[i] as Equipment;
+
+                if (e != null)
+                {
+                    //장착 중인 장비는 [E] 표시가 추가로 붙음
+                    if (e.OnEquipped)
+                    {
+                        itemInfo += "[E] ";
+                    }
+                }
+                else { Console.WriteLine("\nItem => Equipment 캐스팅 오류!!!\n"); }
+
+                itemInfo += $"{e.ItemName})";
+
+                //0 이하인 능력치는 표기하지 않음
+                itemInfo += e.Attack > 0 ? $"  >>  + {e.Attack} ATK" : "";
+                itemInfo += e.Defense > 0 ? $"  >>  + {e.Defense} DEF" : "";
+
+                itemInfo += $"  >>  {e.Description}";
                 equipmentCount++;
+
+                Console.WriteLine(itemInfo);
             }
         }
 
-        if (equipmentCount <= 0) { Console.WriteLine("***인벤토리에 장비가 없습니다***"); }
+        if (equipmentCount <= 0) { Console.WriteLine("\n***인벤토리에 장비가 없습니다***\n"); }
 
         Console.WriteLine("\n0. 인벤토리로 돌아가기\n");
 
