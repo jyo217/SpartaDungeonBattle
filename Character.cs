@@ -26,10 +26,12 @@ namespace SpartaDungeonBattle
             {
                 int previousHP = _hp;
                 _hp = value;
+                if (_hp < 0) _hp = 0;
                 HealthChangedCallback?.Invoke(previousHP, _hp);
             }
         }
         public Action<int, int> HealthChangedCallback { get; set; }
+        public bool isDead { get { return HP <= 0; } }
         public int MaxHP { get; private set; }
         public int MP { get; set; }
         public int MaxMP { get; private set; }
@@ -54,7 +56,7 @@ namespace SpartaDungeonBattle
             HealthChangedCallback = (previousHP, postHP) =>
             {
                 Console.WriteLine($"Lv.{Level} {Name}");
-                Console.WriteLine($"HP {previousHP} -> {postHP}\n");
+                Console.WriteLine($"HP {previousHP} -> {(postHP > 0 ? postHP : "Dead\n")}");
             };
         }
 
