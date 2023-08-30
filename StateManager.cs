@@ -305,6 +305,7 @@ public static class StateManager
         {
             currentBattle.Phase();
         }
+        CurrentState = GameState.LOBBY;
     }
 
     public static int CheckValidInput(int min, int max)
@@ -321,6 +322,7 @@ public static class StateManager
             }
 
             Console.WriteLine("잘못된 입력입니다.");
+            Console.Write(">> ");
         }
     }
     

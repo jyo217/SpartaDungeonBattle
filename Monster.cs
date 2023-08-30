@@ -19,6 +19,7 @@ namespace SpartaDungeonBattle
             {
                 int previousHP = _hp;
                 _hp = value;
+                if (_hp < 0) _hp = 0;
                 HealthChangedCallback?.Invoke(previousHP, _hp);
             }
         }

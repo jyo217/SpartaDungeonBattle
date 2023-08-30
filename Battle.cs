@@ -21,8 +21,6 @@ public class Battle
         }
     }
 
-    private Action resultCallback;
-
     public Battle()
     {
         CurrentBattle = this;
@@ -49,21 +47,17 @@ public class Battle
             case BattlePhase.PLAYER_SKILL:
 
                 break;
-            case BattlePhase.PLAYER_ITEMSELECT:
+            case BattlePhase.PLAYER_ITEM:
 
                 break;
-            case BattlePhase.PLAYER_ITEMUSE:
-
-                break;
-            case BattlePhase.PLAYER_ACTIONRESULT:
-
-                break;
-            case BattlePhase.MONSTER_ACTION:
-
+            case BattlePhase.MONSTER_ATTACK:
+                Process_MonsterAttack();
                 break;
             case BattlePhase.BATTLE_END:
-
+                Process_BattleResult();
                 break;
+            case BattlePhase.BATTLE_OUT:
+                return;
         }
     }
 
@@ -111,7 +105,7 @@ public class Battle
                 _battlePhase = BattlePhase.PLAYER_SKILL;
                 break;
             case 3:
-                _battlePhase = BattlePhase.PLAYER_ITEMSELECT;
+                _battlePhase = BattlePhase.PLAYER_ITEM;
                 break;
         }
     }
@@ -142,7 +136,51 @@ public class Battle
         Console.WriteLine("\n0.다음\n");
         Console.Write(">> ");
         StateManager.CheckValidInput(0, 0);
-        _battlePhase = BattlePhase.MONSTER_ACTION;
+        if (isAllDead == true) _battlePhase = BattlePhase.BATTLE_END;
+        else _battlePhase = BattlePhase.MONSTER_ATTACK;
+    }
+
+    private void Process_MonsterAttack()
+    {
+        foreach (Monster monster in Monsters)
+        {
+            if (monster.isDead) continue;
+            DisplayTop();
+            monster.NormalAttack(Character.CurrentCharacter);
+            Console.WriteLine("\n0.다음\n");
+            Console.Write(">> ");
+            StateManager.CheckValidInput(0, 0);
+            if (Character.CurrentCharacter.isDead)
+            {
+                _battlePhase = BattlePhase.BATTLE_END;
+                return;
+            }
+        }
+        _battlePhase = BattlePhase.PLAYER_BATTLE;
+    }
+
+    private void Process_BattleResult()
+    {
+        if (Character.CurrentCharacter.isDead == false) // 승리한 경우
+        {
+            Console.WriteLine("Victory\n");
+            Console.WriteLine($"던전에서 몬스터 {Monsters.Count}마리를 잡았습니다.\n");
+            Console.WriteLine("[캐릭터 정보]");
+            Console.WriteLine($"현재 체력 : {Character.CurrentCharacter.HP}");
+            Console.Write($"경험치 : Lv.{Character.CurrentCharacter.Level} (exp : {Character.CurrentCharacter.Exp})");
+            Character.CurrentCharacter.IncreaseExp(Monsters.Count);
+            Console.WriteLine($" -> Lv.{Character.CurrentCharacter.Level} (exp : {Character.CurrentCharacter.Exp})");
+        }
+        else // 패배한 경우
+        {
+            Console.WriteLine("You Lose\n");
+            Console.WriteLine($"Lv.{Character.CurrentCharacter.Level} {Character.CurrentCharacter.Name}");
+            Character.CurrentCharacter.HP = 10;
+        }
+        Console.WriteLine("\n0.다음\n");
+        Console.Write(">> ");
+        StateManager.CheckValidInput(0, 0);
+        _battlePhase = BattlePhase.BATTLE_OUT;
     }
 
     private void CreateMonsters()
@@ -167,10 +205,8 @@ enum BattlePhase
     PLAYER_BATTLE,
     PLAYER_ATTACK,
     PLAYER_SKILL,
-    PLAYER_ITEMSELECT,
-    PLAYER_ITEMUSE,
-    PLAYER_ACTIONRESULT,
-    MONSTER_ACTION,
+    PLAYER_ITEM,
+    MONSTER_ATTACK,
     BATTLE_END,
     BATTLE_OUT,
 }
