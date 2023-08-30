@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace SpartaDungeonBattle
 {
-    internal class Skill
+    [Serializable]
+    public class Skill
     {
         public string SkillName { get; private set; }
         public int Cost { get; private set; }
