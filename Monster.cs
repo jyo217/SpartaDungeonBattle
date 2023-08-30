@@ -14,15 +14,24 @@ namespace SpartaDungeonBattle
         public int Attack { get; private set; }
         public int HP { get; private set; }
 
+        public bool isDead { get { return HP <= 0; } }
+
         /// <summary>
         /// 필요에 따라 편집
         /// </summary>
-        public Monster() { }
+        public Monster(int level, string name, int attack, int hp)
+        {
+            Level = level;
+            Name = name;
+            Attack = attack;
+            HP = hp;
+        }
 
-        public event Action<Character> OnHit;
 
-        public event Action OnDead;
+        public event Action<Character>? OnHit;
 
-        public event Action<Character> OnAttack;
+        public event Action? OnDead;
+
+        public event Action<Character>? OnAttack;
     }
 }
