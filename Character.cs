@@ -40,6 +40,29 @@ namespace SpartaDungeonBattle
         public event Action OnDead;
 
         public event Action<Monster> OnAttack;
+
+        public string ClassToString()
+        {
+            switch (Class) {
+                case ClassType.WARRIOR:
+                    return "전사";
+                case ClassType.ARCHER:
+                    return "궁수";
+                case ClassType.MAGICIAN:
+                    return "마법사";
+                case ClassType.CLERIC:
+                    return "클레릭";
+                default:
+                    return "";
+            }
+        }
+
+        public bool SetNickname(string nickname)
+        {
+            if (nickname != "") return false;
+            Name = nickname;
+            return true;
+        }
     }
 
     public enum ClassType
