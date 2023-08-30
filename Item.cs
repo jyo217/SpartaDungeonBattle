@@ -8,7 +8,7 @@ namespace SpartaDungeonBattle
 {
     public enum ItemType { Weapon = 0, Armor, Consumption }
     public enum ItemTarget { ToCharacter = 0, ToMonster }
-​
+    
 	public abstract class Item
     {
         public ItemType ItemType { get; }
@@ -26,11 +26,11 @@ namespace SpartaDungeonBattle
     }
 
     public class Equipment : Item
-    {​
+    {
 		// Equipment 고유 필드
 		public int Attack { get; }
         public int Defense { get; }
-​
+        
 		public Equipment(ItemType itemType, string itemName, int gold, string description, int atk, int def) : base(itemType, itemName, gold, description)
         {
             Attack = atk;
@@ -38,7 +38,7 @@ namespace SpartaDungeonBattle
         }
     }
     public class Consumption : Item
-    {​
+    {
         public ItemTarget Target { get; }
 
         // Consumption 고유 메서드
@@ -48,9 +48,9 @@ namespace SpartaDungeonBattle
             if (monster != null) ItemToMonster.Invoke(monster);
         }
 
-        Action<Character>? ItemToCharacter;​
+        Action<Character>? ItemToCharacter;
 		Action<Monster>? ItemToMonster;
-​
+        
 		public Consumption(string itemName, int gold, string description, ItemTarget target) : base(ItemType.Consumption, itemName, gold, description)
         {
             Target = target;
@@ -59,7 +59,7 @@ namespace SpartaDungeonBattle
         public static Consumption MakePotion()
         {
             Consumption potion = new Consumption("붉은 포션", 20, "HP를 20 회복시킵니다.", ItemTarget.ToCharacter);
-            potion.ItemToCharacter += (Character character) => { character.HP += 20; if (character.HP > character.MaxHP) character.HP = character.MaxHP };
+            potion.ItemToCharacter += (Character character) => { character.HP += 20; if (character.HP > character.MaxHP) character.HP = character.MaxHP; };
             return potion;
         }
     }

@@ -4,12 +4,14 @@ using System.Linq;
 using System.Net.Security;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace SpartaDungeonBattle
 {
     [Serializable]
     public class Character
     {
+        public static Character CurrentCharacter { get; private set; }
         public int Level { get; private set; }
         public string Name { get; set; }
         public ClassType Class { get; private set; }
@@ -28,8 +30,18 @@ namespace SpartaDungeonBattle
         /// <summary>
         /// 필요에 따라 편집
         /// </summary>
+        public Character()
+        {
+            CurrentCharacter = this;
+            this.Name = "";
+            Class = ClassType.WARRIOR;
+            this.Gold = 0;
+            this.Exp = 0;
+        }
+        
         public Character(string name, ClassType classType, int gold, int exp) 
         {
+            CurrentCharacter = this;
             this.Name = name;
             Class = classType;
             SetClass(classType);
@@ -76,8 +88,9 @@ namespace SpartaDungeonBattle
         /// <summary>
         /// 입력받은 클래스에 따른 시작 ATK, DEF, HP, MP 설정
         /// </summary>
-        private void SetClass(ClassType classType)
+        public void SetClass(ClassType classType)
         {
+            Class = classType;
             switch (classType)
             {
                 case ClassType.WARRIOR:
@@ -147,7 +160,7 @@ namespace SpartaDungeonBattle
 
         public bool SetNickname(string nickname)
         {
-            if (nickname != "") return false;
+            if (nickname == "") return false;
             Name = nickname;
             return true;
         }
