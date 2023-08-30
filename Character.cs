@@ -18,7 +18,18 @@ namespace SpartaDungeonBattle
         public List<Equipment> ItemOnEquipped { get; private set; }
         public int Attack { get; private set; }
         public int Defense { get; private set; }
-        public int HP { get; set; }
+        private int _hp;
+        public int HP
+        {
+            get { return _hp; }
+            set
+            {
+                int previousHP = _hp;
+                _hp = value;
+                HealthChangedCallback?.Invoke(previousHP, _hp);
+            }
+        }
+        public Action<int, int> HealthChangedCallback { get; set; }
         public int MaxHP { get; private set; }
         public int MP { get; set; }
         public int MaxMP { get; private set; }
@@ -40,16 +51,11 @@ namespace SpartaDungeonBattle
             Exp = 0;
             Inventory = new Inventory();
             ItemOnEquipped = new List<Equipment>();
-        }
-        
-        public Character(string name, ClassType classType, int gold, int exp) 
-        {
-            CurrentCharacter = this;
-            Name = name;
-            Class = classType;
-            SetClass(classType);
-            this.Gold = gold;
-            Exp = exp;
+            HealthChangedCallback = (previousHP, postHP) =>
+            {
+                Console.WriteLine($"Lv.{Level} {Name}");
+                Console.WriteLine($"HP {previousHP} -> {postHP}\n");
+            };
         }
 
         public void UseSkill(Skill skill) { }
@@ -156,7 +162,7 @@ namespace SpartaDungeonBattle
                     }
             }
         }
-        public bool NormalAttack(Monster monster, out bool isCritAttack)
+        public bool NormalAttack(Monster monster)
         {
             Random random = new Random();
 
@@ -170,6 +176,7 @@ namespace SpartaDungeonBattle
                                         (int)Math.Ceiling   (Attack * (1 + damageRangeMultiplier))
                                      );
             // 크리티컬 데미지 여부 판단 후 크리티컬 배율 반영
+            bool isCritAttack;
             if (random.Next(1, 101) <= critRate * 100)
             {
                 damage = (int)(damage * critMultiplier);
@@ -179,9 +186,11 @@ namespace SpartaDungeonBattle
             {
                 isCritAttack = false;
             }
-            return monster.OnHit(damage, AttackType.NORMAL);
+
+            Console.WriteLine($"{Name} 의 공격!");
+            return monster.OnHit(damage, AttackType.NORMAL, isCritAttack);
         }
-        public bool OnHit(int damage, AttackType type)
+        public bool OnHit(int damage, AttackType type, bool isCritAttack)
         {
             Random random = new Random();
             float dodgeRate = 0.1f;
@@ -191,11 +200,13 @@ namespace SpartaDungeonBattle
                     if (random.Next(1, 101) <= dodgeRate * 100)
                     {
                         // 회피 성공
+                        Console.WriteLine("하지만 공격은 빗나갔습니다!\n");
                         return false;
                     }
                     else
                     {
                         // 회피 실패
+                        Console.WriteLine($"{Name} 을(를) 맞췄습니다.   [데미지 : {damage}]{(isCritAttack ? " - 치명타 공격!!" : "")}\n");
                         HP -= damage;
                         if (HP < 0) HP = 0;
                         return true;
