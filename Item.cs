@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SpartaDungeonBattle
 {
-    public enum ItemType { Weapon = 0, Armor, Consumption }
+    public enum ItemType { EQUIPMENT, CONSUMPTION }
     public enum ItemTarget { ToCharacter = 0, ToMonster }
     
 	public abstract class Item
@@ -32,7 +32,7 @@ namespace SpartaDungeonBattle
         public int Defense { get; }
         public bool OnEquipped { get; set; }
         
-		public Equipment(ItemType itemType, string itemName, int gold, string description, int atk, int def) : base(itemType, itemName, gold, description)
+		public Equipment(string itemName, int gold, string description, int atk, int def) : base(ItemType.EQUIPMENT, itemName, gold, description)
         {
             Attack = atk;
             Defense = def;
@@ -53,7 +53,7 @@ namespace SpartaDungeonBattle
         Action<Character>? ItemToCharacter;
 		Action<Monster>? ItemToMonster;
         
-		public Consumption(string itemName, int gold, string description, ItemTarget target) : base(ItemType.Consumption, itemName, gold, description)
+		public Consumption(string itemName, int gold, string description, ItemTarget target) : base(ItemType.CONSUMPTION, itemName, gold, description)
         {
             Target = target;
         }
