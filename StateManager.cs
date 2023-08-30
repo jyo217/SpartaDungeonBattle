@@ -103,7 +103,22 @@ public static class StateManager
         Console.WriteLine("    아이템 이름          효과                     설명               ");
         for (int i = 0; i < Character.CurrentCharacter.Inventory.Count; i++)
         {
-            //아이템 출력함수
+            Item item = Character.CurrentCharacter.Inventory[i];
+            switch (item.ItemType) 
+            {
+                case ItemType.CONSUMPTION :
+                    Consumption consumption = item as Consumption;
+                    Console.WriteLine(" " + consumption.ItemName.PadLeft(10, ' ') + "|" + consumption.Description);
+                    break;
+                case ItemType.EQUIPMENT :
+                    Equipment equipment = item as Equipment;
+                    Console.WriteLine(" " + equipment.ItemName.PadLeft(10, ' ') + "| 공격력 : "+ equipment.Attack.ToString().PadLeft(5, ' ') 
+                                        +" 방어력 : " + equipment.Defense.ToString().PadLeft(5, ' ') + "|" + item.Description);
+                    break;
+                default:
+                    break;
+            }
+            
         }
         Console.WriteLine();
     }
