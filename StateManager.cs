@@ -215,7 +215,7 @@ public static class StateManager
         Console.WriteLine("[장착 관리]");
         Console.WriteLine("장착 또는 장착 해제할 아이템을 선택해주세요.\n");
         Console.WriteLine("[아이템 목록]");
-        Console.WriteLine("    아이템 이름          효과                     설명               ");
+        Console.WriteLine("\n***아이템 이름  >>  공격력  >>  방어력  >>  아이템 설명***\n");
 
         int equipmentCount = 0;
         List<int> items = new List<int>();
@@ -225,20 +225,31 @@ public static class StateManager
         for (int i = 0; i < Character.CurrentCharacter.Inventory.Count; i++)
         {
             //장비만 골라서 출력
-            if (Character.CurrentCharacter.Inventory[i].ItemType == ItemType.EQUIPMENT)
+            if (Character.CurrentCharacter.Inventory.ItemList[i].ItemType == ItemType.EQUIPMENT)
             {
                 //해당 장비 아이템의 인덱스 저장
                 items.Add(i);
                 //번호
                 Console.Write($"{i + 1}. ");
-                if()
-                Console.Write("");
-                //아무튼 장비만 골라서 죄다 출력. 장착 중인 장비는 [E] 표시가 추가로 붙음
+
+                e = Character.CurrentCharacter.Inventory.ItemList[i] as Equipment;
+
+                if (e != null)
+                {
+                    //장착 중인 장비는 [E] 표시가 추가로 붙음
+                    if (e.OnEquipped)
+                    {
+                        Console.Write("[E] ");
+                    }
+                }
+                else { Console.WriteLine("\nItem => Equipment 캐스팅 오류!!!\n"); }
+
+                Console.WriteLine($"{e.ItemName}  >>  {e.Attack}  >>  {e.Defense}  >>  {e.Description}");
                 equipmentCount++;
             }
         }
 
-        if (equipmentCount <= 0) { Console.WriteLine("***인벤토리에 장비가 없습니다***"); }
+        if (equipmentCount <= 0) { Console.WriteLine("\n***인벤토리에 장비가 없습니다***\n"); }
 
         Console.WriteLine("\n0. 인벤토리로 돌아가기\n");
 
