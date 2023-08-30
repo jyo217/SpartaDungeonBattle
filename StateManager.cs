@@ -108,12 +108,12 @@ public static class StateManager
             {
                 case ItemType.CONSUMPTION :
                     Consumption consumption = item as Consumption;
-                    Console.WriteLine(" " + consumption.ItemName.PadLeft(10, ' ') + "|" + consumption.Description);
+                    Console.WriteLine(" " + consumption.ItemName.PadRight(10, ' ') + "  |  " + consumption.Description);
                     break;
                 case ItemType.EQUIPMENT :
                     Equipment equipment = item as Equipment;
-                    Console.WriteLine(" " + equipment.ItemName.PadLeft(10, ' ') + "| 공격력 : "+ equipment.Attack.ToString().PadLeft(5, ' ') 
-                                        +" 방어력 : " + equipment.Defense.ToString().PadLeft(5, ' ') + "|" + item.Description);
+                    Console.WriteLine(" " + equipment.ItemName.PadRight(10, ' ') + "  |  공격력 : "+ equipment.Attack.ToString().PadRight(5, ' ') 
+                                        +"  방어력 : " + equipment.Defense.ToString().PadRight(5, ' ') + "  |  " + item.Description);
                     break;
                 default:
                     break;
