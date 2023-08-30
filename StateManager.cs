@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,19 +20,24 @@ public static class StateManager
                 Process_GameStart_Nickname();
                 break;
             case GameState.GAMESTART_CLASS:
-
+                Display_GameStart_Class();
+                Process_GameStart_Class();
                 break;
             case GameState.LOBBY:
-
+                Display_Lobby();
+                Process_Lobby();
                 break;
             case GameState.VIEW_STATUS:
-
+                Display_View_Status();
+                Process_View_Status();
                 break;
             case GameState.VIEW_INVENTORY:
-
+                Display_View_Inventory();
+                Process_View_Inventory();
                 break;
             case GameState.MANAGE_EQUIPMENT:
-
+                Display_Manage_Equipment();
+                Process_Manage_Equipment();
                 break;
             case GameState.BATTLE:
 
@@ -54,70 +60,59 @@ public static class StateManager
         Console.WriteLine("스파르타 던전에 오신 여러분 환영합니다.");
     }
 
+    static void Display_GameStart_Class()
+    {
+        Console.Clear();
+        Console.WriteLine("캐릭터의 직업을 결정할 수 있습니다.");
+    }
+
     static void Display_Lobby()
     {
-        Console.Title = "SpartaDungeonBattle";
-        Console.WriteLine("Sparta Dungeon Game!");
-        Console.WriteLine("님, 스파르타 마을에 오신것을 환영합니다!");
-        Console.WriteLine("이곳에서 던전으로 돌아가기 전 활동을 할 수 있습니다.");
-        Console.WriteLine();
-        Console.WriteLine("0. 게임 종료 ");
-        Console.WriteLine("1. 상태 보기");
-        Console.WriteLine("2. 인벤토리");
-        Console.WriteLine("3. 전투시작");
-        Console.WriteLine(" ");
-        int _input = CheckValidInput(0, 3);
-
-        switch (_input)
-        {
-            case 0:
-                Environment.Exit(0);
-                break;
-            case 1:
-                Display_View_Status();
-                break;
-            case 2:
-                Display_View_Inventory();
-                break;
-            case 3:
-                Display_Battle();
-                break;
-        }
+        Console.Clear();
+        Console.WriteLine("[LOBBY]");
+        Console.WriteLine("스파르타 던전에 오신 여러분 환영합니다.");
+        Console.WriteLine("이제 전투를 시작할 수 있습니다.\n");
     }
 
     static void Display_View_Status()
     {
         Console.Clear();
-        Console.WriteLine("상태 보기");
+        Console.WriteLine("[상태 보기]");
         Console.WriteLine("캐릭터의 정보가 표시됩니다.\n");
         Console.WriteLine($"Lv. {CurrentCharacter.Level.ToString("D2")}");
         Console.WriteLine($"{CurrentCharacter.Name} ( {CurrentCharacter.ClassToString()} )");
         Console.WriteLine($"공격력 : {CurrentCharacter.Attack}");
         Console.WriteLine($"방어력 : {CurrentCharacter.Defense}");
         Console.WriteLine($"체 력 : {CurrentCharacter.HP}");
-        Console.WriteLine($"Gold : {CurrentCharacter.Gold}");
+        Console.WriteLine($"Gold : {CurrentCharacter.Gold}\n");
     }
 
     static void Display_View_Inventory()
     {
         Console.Clear();
-        Console.WriteLine("인벤토리");
-        Console.WriteLine("보유중인 장비,포션을 관리할 수 있습니다.");
-        Console.WriteLine();
+        Console.WriteLine("[인벤토리]");
+        Console.WriteLine("보유중인 장비,포션을 관리할 수 있습니다.\n");
         Console.WriteLine("[아이템 목록]");
-
+        Console.WriteLine("    아이템 이름          효과                     설명               ");
+        for (int i = 0; i < CurrentCharacter.Inventory.count; i++)
+        {
+            //아이템 출력함수
+        }
+        Console.WriteLine();
     }
 
-    static void Display_Battle()
+    static void Display_Manage_Equipment()
     {
         Console.Clear();
-        Console.WriteLine("전투시작");
-        Console.WriteLine("전투를 시작하면 1~4마리의 몬스터가 랜덤하게 등장합니다.");
-        Console.WriteLine("표시되는 순서는 랜덤입니다.");
-        Console.WriteLine("몬스터는 3종류 있습니다.");
-        Console.WriteLine("중복해서 나타날 수 있습니다.");
+        Console.WriteLine("[장착 관리]");
+        Console.WriteLine("장착 또는 장착 해제할 아이템을 선택해주세요.\n");
+        Console.WriteLine("[아이템 목록]");
+        Console.WriteLine("    아이템 이름          효과                     설명               ");
+        for (int i = 0; i < CurrentCharacter.Inventory.count; i++)
+        {
+            //아이템 출력함수
+        }
         Console.WriteLine();
-        Console.WriteLine("[몬스터 정보]");
     }
 
     static void Process_GameStart_Nickname()
@@ -130,6 +125,87 @@ public static class StateManager
             inputName = Console.ReadLine();
         } while (CurrentCharacter.SetNickname(inputName) == false);
         CurrentState = GameState.GAMESTART_CLASS;
+    }
+
+    static void Process_GameStart_Class()
+    {
+        Console.WriteLine("1. 전사 / 2. 궁수 / 3. 마법사 / 4. 클레릭");
+        Console.WriteLine("원하시는 직업을 선택해주세요.");
+        Console.Write(">> ");
+        int input = CheckValidInput(1, Enum.GetValues(typeof(ClassType)).Length);
+        // 직업 설정 함수
+        // CurrentCharacter.SetClass(((ClassType)input);
+
+        CurrentState = GameState.LOBBY;
+    }
+
+    static void Process_Lobby()
+    {
+        Console.WriteLine("1. 상태 보기");
+        Console.WriteLine("2. 인벤토리");
+        Console.WriteLine("3. 전투 시작");
+        Console.WriteLine("\n0. 게임 종료\n");
+
+        Console.WriteLine("원하시는 행동을 입력해주세요.");
+        Console.Write(">> ");
+        int input = CheckValidInput(0, 3);
+
+        switch (input)
+        {
+            case 0:
+                Environment.Exit(0);
+                break;
+            case 1:
+                CurrentState = GameState.VIEW_STATUS;
+                break;
+            case 2:
+                CurrentState = GameState.VIEW_INVENTORY;
+                break;
+            case 3:
+                CurrentState = GameState.BATTLE;
+                break;
+        }
+    }
+
+    static void Process_View_Status()
+    {
+        Console.WriteLine("\n0. 로비로 나가기\n");
+
+        Console.WriteLine("원하시는 행동을 입력해주세요.");
+        Console.Write(">> ");
+        int input = CheckValidInput(0, 0);
+        switch (input)
+        {
+            case 0:
+                CurrentState = GameState.LOBBY;
+                break;
+        }
+    }
+
+    static void Process_View_Inventory()
+    {
+        Console.WriteLine("1. 장착 관리");
+        Console.WriteLine("\n0. 로비로 나가기\n");
+
+        Console.WriteLine("원하시는 행동을 입력해주세요.");
+        Console.Write(">> ");
+
+        int input = CheckValidInput(0, 1);
+
+        switch (input)
+        {
+            case 0:
+                CurrentState = GameState.LOBBY;
+                break;
+            case 1:
+                CurrentState = GameState.MANAGE_EQUIPMENT;
+                break;
+        }
+    }
+
+    static void Process_Manage_Equipment()
+    {
+
     }
 
     static int CheckValidInput(int min, int max)
