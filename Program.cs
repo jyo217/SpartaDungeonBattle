@@ -4,7 +4,14 @@
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            Initialize();
+            StateManager.State();
+        }
+
+        static void Initialize()
+        {
+            StateManager.Initialize();
+            new Character();
         }
     }
 }

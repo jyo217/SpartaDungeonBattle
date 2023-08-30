@@ -8,43 +8,50 @@ using System.Threading.Tasks;
 
 public static class StateManager
 {
-    public static Character? CurrentCharacter { get; set; }
     public static GameState CurrentState { get; private set; }
+
+    public static void Initialize()
+    {
+        CurrentState = GameState.GAMESTART_NICKNAME;
+    }
 
     public static void State()
     {
-        switch (CurrentState)
+        while(true)
         {
-            case GameState.GAMESTART_NICKNAME:
-                Display_GameStart_Nickname();
-                Process_GameStart_Nickname();
-                break;
-            case GameState.GAMESTART_CLASS:
-                Display_GameStart_Class();
-                Process_GameStart_Class();
-                break;
-            case GameState.LOBBY:
-                Display_Lobby();
-                Process_Lobby();
-                break;
-            case GameState.VIEW_STATUS:
-                Display_View_Status();
-                Process_View_Status();
-                break;
-            case GameState.VIEW_INVENTORY:
-                Display_View_Inventory();
-                Process_View_Inventory();
-                break;
-            case GameState.MANAGE_EQUIPMENT:
-                Display_Manage_Equipment();
-                Process_Manage_Equipment();
-                break;
-            case GameState.BATTLE:
+            switch (CurrentState)
+            {
+                case GameState.GAMESTART_NICKNAME:
+                    Display_GameStart_Nickname();
+                    Process_GameStart_Nickname();
+                    break;
+                case GameState.GAMESTART_CLASS:
+                    Display_GameStart_Class();
+                    Process_GameStart_Class();
+                    break;
+                case GameState.LOBBY:
+                    Display_Lobby();
+                    Process_Lobby();
+                    break;
+                case GameState.VIEW_STATUS:
+                    Display_View_Status();
+                    Process_View_Status();
+                    break;
+                case GameState.VIEW_INVENTORY:
+                    Display_View_Inventory();
+                    Process_View_Inventory();
+                    break;
+                case GameState.MANAGE_EQUIPMENT:
+                    Display_Manage_Equipment();
+                    Process_Manage_Equipment();
+                    break;
+                case GameState.BATTLE:
 
-                break;
-            default:
-                Console.WriteLine("State에 맞는 함수를 설정해주지 않았습니다.");
-                break;
+                    break;
+                default:
+                    Console.WriteLine("State에 맞는 함수를 설정해주지 않았습니다.");
+                    break;
+            }
         }
     }
 
@@ -79,12 +86,12 @@ public static class StateManager
         Console.Clear();
         Console.WriteLine("[상태 보기]");
         Console.WriteLine("캐릭터의 정보가 표시됩니다.\n");
-        Console.WriteLine($"Lv. {CurrentCharacter.Level.ToString("D2")}");
-        Console.WriteLine($"{CurrentCharacter.Name} ( {CurrentCharacter.ClassToString()} )");
-        Console.WriteLine($"공격력 : {CurrentCharacter.Attack}");
-        Console.WriteLine($"방어력 : {CurrentCharacter.Defense}");
-        Console.WriteLine($"체 력 : {CurrentCharacter.HP}");
-        Console.WriteLine($"Gold : {CurrentCharacter.Gold}\n");
+        Console.WriteLine($"Lv. {Character.CurrentCharacter.Level.ToString("D2")}");
+        Console.WriteLine($"{Character.CurrentCharacter.Name} ( {Character.CurrentCharacter.ClassToString()} )");
+        Console.WriteLine($"공격력 : {Character.CurrentCharacter.Attack}");
+        Console.WriteLine($"방어력 : {Character.CurrentCharacter.Defense}");
+        Console.WriteLine($"체 력 : {Character.CurrentCharacter.HP}");
+        Console.WriteLine($"Gold : {Character.CurrentCharacter.Gold}\n");
     }
 
     static void Display_View_Inventory()
@@ -94,7 +101,7 @@ public static class StateManager
         Console.WriteLine("보유중인 장비,포션을 관리할 수 있습니다.\n");
         Console.WriteLine("[아이템 목록]");
         Console.WriteLine("    아이템 이름          효과                     설명               ");
-        for (int i = 0; i < CurrentCharacter.Inventory.Count; i++)
+        for (int i = 0; i < Character.CurrentCharacter.Inventory.Count; i++)
         {
             //아이템 출력함수
         }
@@ -108,7 +115,7 @@ public static class StateManager
         Console.WriteLine("장착 또는 장착 해제할 아이템을 선택해주세요.\n");
         Console.WriteLine("[아이템 목록]");
         Console.WriteLine("    아이템 이름          효과                     설명               ");
-        for (int i = 0; i < CurrentCharacter.Inventory.Count; i++)
+        for (int i = 0; i < Character.CurrentCharacter.Inventory.Count; i++)
         {
             //아이템 출력함수
         }
@@ -123,7 +130,7 @@ public static class StateManager
             Console.WriteLine("원하시는 이름을 설정해주세요.");
             Console.Write(">> ");
             inputName = Console.ReadLine();
-        } while (CurrentCharacter.SetNickname(inputName) == false);
+        } while (Character.CurrentCharacter.SetNickname(inputName) == false);
         CurrentState = GameState.GAMESTART_CLASS;
     }
 
@@ -133,8 +140,7 @@ public static class StateManager
         Console.WriteLine("원하시는 직업을 선택해주세요.");
         Console.Write(">> ");
         int input = CheckValidInput(1, Enum.GetValues(typeof(ClassType)).Length);
-        // 직업 설정 함수
-        // CurrentCharacter.SetClass(((ClassType)input);
+        Character.CurrentCharacter.SetClass(((ClassType)input));
 
         CurrentState = GameState.LOBBY;
     }
@@ -224,15 +230,16 @@ public static class StateManager
             Console.WriteLine("잘못된 입력입니다.");
         }
     }
+    
+}
 
-    public enum GameState
-    {
-        GAMESTART_NICKNAME,
-        GAMESTART_CLASS,
-        LOBBY,
-        VIEW_STATUS,
-        VIEW_INVENTORY,
-        MANAGE_EQUIPMENT,
-        BATTLE,
-    }
+public enum GameState
+{
+    GAMESTART_NICKNAME,
+    GAMESTART_CLASS,
+    LOBBY,
+    VIEW_STATUS,
+    VIEW_INVENTORY,
+    MANAGE_EQUIPMENT,
+    BATTLE,
 }
