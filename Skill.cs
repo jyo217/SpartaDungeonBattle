@@ -50,7 +50,7 @@ namespace SpartaDungeonBattle
                         };
                     break;
 
-                case SpartaDungeonBattle.SkillName.MULTISHOT:
+                case SpartaDungeonBattle.SkillName.POWERSTRIKE:
                     SkillName = "강한타격";
                     Cost = 10;
                     SkillDescription = "단일의 적에게 캐릭터의 공격력의 2배의 데미지를 가한다";
