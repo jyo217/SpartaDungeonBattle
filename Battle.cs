@@ -48,7 +48,7 @@ public class Battle
 
                 break;
             case BattlePhase.PLAYER_ITEM:
-
+                Process_PlayerItem();
                 break;
             case BattlePhase.MONSTER_ATTACK:
                 Process_MonsterAttack();
@@ -140,6 +140,96 @@ public class Battle
         else _battlePhase = BattlePhase.MONSTER_ATTACK;
     }
 
+    private void Process_PlayerItem()
+    {
+        while (true)
+        {
+            DisplayTop();
+            DisplayMonsters();
+            DisplayCharacterInfo();
+            Console.WriteLine("[아이템 목록]");
+            Console.WriteLine("\n***아이템 이름  >>  능력치  >>  아이템 설명***\n");
+            int n = 0;
+            List<Consumption> ItemList = new List<Consumption>();
+            for (int i = 0; i < Character.CurrentCharacter.Inventory.Count; i++)
+            {
+                Item item = Character.CurrentCharacter.Inventory[i];
+                if (item.ItemType == ItemType.CONSUMPTION)
+                {
+                    Consumption consumption = item as Consumption;
+                    Console.WriteLine((++n).ToString() + "    " + consumption.ItemName + "  >>  " + consumption.Description);
+                    ItemList.Add(consumption);
+                }
+            }
+
+            Console.WriteLine("사용하려는 아이템의 번호를 입력해주세요.");
+            Console.WriteLine("0. 돌아가기\n");
+            Console.Write(">> ");
+
+            int input = StateManager.CheckValidInput(0, n) - 1;
+            if (input == -1)
+            {
+                _battlePhase = BattlePhase.PLAYER_BATTLE;
+                return;
+            }
+
+            if (ItemList[input].Target == ItemTarget.ToCharacter)
+            {
+                // 자신에게 아이템 사용
+                DisplayTop();
+                Console.WriteLine($"{Character.CurrentCharacter.Name}은(는) {ItemList[input].ItemName}을(를) 사용했다!\n");
+                ItemList[input].ItemFunc(Character.CurrentCharacter, null);
+
+                Console.WriteLine("\n0.다음\n");
+                Console.Write(">> ");
+                StateManager.CheckValidInput(0, 0);
+                _battlePhase = BattlePhase.MONSTER_ATTACK;
+                return;
+            }
+            else if (ItemList[input].Target == ItemTarget.ToMonster)
+            {
+                bool isSuccess = Process_ItemToMonster(ItemList[input]);
+                if (isSuccess)
+                {
+                    Console.WriteLine("\n0.다음\n");
+                    Console.Write(">> ");
+                    StateManager.CheckValidInput(0, 0);
+                    if (isAllDead == true) _battlePhase = BattlePhase.BATTLE_END;
+                    else _battlePhase = BattlePhase.MONSTER_ATTACK;
+                    break;
+                }
+            }
+
+        }
+    }
+
+    private bool Process_ItemToMonster(Consumption consumption)
+    {
+        DisplayTop();
+        DisplayMonsters(true);
+
+        // 몬스터에게 아이템 사용
+        Console.WriteLine("대상이 되는 몬스터의 번호를 입력해주세요.");
+        Console.WriteLine("0. 돌아가기\n");
+        Console.Write(">> ");
+
+        int input = -1;
+        while (true)
+        {
+            input = StateManager.CheckValidInput(0, Monsters.Count) - 1;
+            if (input == -1)
+                return false;
+
+            if (Monsters[input].isDead) Console.WriteLine("잘못된 입력입니다.");
+            else break;
+        }
+
+        DisplayTop();
+        Console.WriteLine($"{Character.CurrentCharacter.Name}은(는) {consumption.ItemName}을(를) 사용했다!\n");
+        consumption.ItemFunc(null, Monsters[input]);
+        return true;
+    }
+
     private void Process_MonsterAttack()
     {
         foreach (Monster monster in Monsters)
@@ -192,8 +282,8 @@ public class Battle
             int earnedMpPotion = potionDrop > 1 ? 1 : 0;
             string earnedPotionMsg = "포션 획득! : ";
 
-            if (earnedHpPotion > 0) { earnedPotionMsg += $"{Consumption.MakePotion().ItemName} X {earnedHpPotion}   ,   "; }
-            for (int i = 0; i < earnedHpPotion; i++) { character.Inventory.ItemList.Add(Consumption.MakePotion()); }//HP 포션 인벤토리에 추가
+            if (earnedHpPotion > 0) { earnedPotionMsg += $"{Consumption.MakeHpPotion().ItemName} X {earnedHpPotion}   ,   "; }
+            for (int i = 0; i < earnedHpPotion; i++) { character.Inventory.ItemList.Add(Consumption.MakeHpPotion()); }//HP 포션 인벤토리에 추가
            
             if (earnedMpPotion > 0) { earnedPotionMsg += $"{Consumption.MakeMpPotion().ItemName} X {earnedMpPotion}   "; }
             for (int i = 0; i < earnedMpPotion; i++) { character.Inventory.ItemList.Add(Consumption.MakeMpPotion()); }//MP 포션 인벤토리에 추가
@@ -205,8 +295,8 @@ public class Battle
             
             /*
             string earnedEquipmentMsg = "장비 획득! : ";
-            if (earnedHpPotion > 0) { earnedPotionMsg += $"{Consumption.MakePotion().ItemName} X {earnedHpPotion}   ,   "; }
-            for (int i = 0; i < earnedHpPotion; i++) { character.Inventory.ItemList.Add(Consumption.MakePotion()); }//HP 포션 인벤토리에 추가
+            if (earnedHpPotion > 0) { earnedPotionMsg += $"{Consumption.MakeHpPotion().ItemName} X {earnedHpPotion}   ,   "; }
+            for (int i = 0; i < earnedHpPotion; i++) { character.Inventory.ItemList.Add(Consumption.MakeHpPotion()); }//HP 포션 인벤토리에 추가
 
             if (earnedMpPotion > 0) { earnedPotionMsg += $"{Consumption.MakeMpPotion().ItemName} X {earnedMpPotion}   "; }
             for (int i = 0; i < earnedMpPotion; i++) { character.Inventory.ItemList.Add(Consumption.MakeMpPotion()); }//MP 포션 인벤토리에 추가
