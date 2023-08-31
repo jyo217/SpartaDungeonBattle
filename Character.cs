@@ -130,6 +130,7 @@ namespace SpartaDungeonBattle
                         HP = MaxHP;
                         MaxMP = 50;
                         MP = MaxMP;
+                        MainSkill = new Skill(SkillName.POWERSTRIKE);
                         break;
                     }
                 case ClassType.ARCHER:
@@ -140,6 +141,7 @@ namespace SpartaDungeonBattle
                         HP = MaxHP;
                         MaxMP = 60;
                         MP = MaxMP;
+                        MainSkill = new Skill(SkillName.MULTISHOT);
                         break;
                     }
                 case ClassType.MAGICIAN:
@@ -150,6 +152,7 @@ namespace SpartaDungeonBattle
                         HP = MaxHP;
                         MaxMP = 90;
                         MP = MaxMP;
+                        MainSkill = new Skill(SkillName.FIREBALL);
                         break;
                     }
                 //case ClassType.CLERIC:
