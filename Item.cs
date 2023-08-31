@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -65,10 +66,11 @@ namespace SpartaDungeonBattle
             return potion;
         }
 
-        public static Consumption MakeBluePotion()
+        public static Consumption MakeMpPotion()
         {
-            Consumption potion = new Consumption("파란 포션", 20, "MP를 30 회복시킵니다.", ItemTarget.ToCharacter);
-            potion.ItemToCharacter += (Character character) => { character.MP += 20; if (character.MP > character.MaxMP) character.HP = character.MaxMP; };
+            Consumption potion = new Consumption("파란 포션 ", 20, "MP를 20 회복시킵니다.", ItemTarget.ToCharacter);
+            potion.ItemToCharacter += (Character character) => { character.MP += 20; if (character.MP > character.MaxMP) character.MP = character.MaxMP; };
+
             return potion;
         }
     }
