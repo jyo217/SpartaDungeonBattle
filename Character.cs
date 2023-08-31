@@ -38,8 +38,8 @@ namespace SpartaDungeonBattle
         public int Gold { get; private set; }
         public int Exp { get; private set; }
         public Inventory Inventory { get; private set; }
-        public List<Skill> Skills { get; private set; }
-
+        //public List<Skill> Skills { get; private set; }
+        public Skill MainSkill { get; private set; }
         /// <summary>
         /// 필요에 따라 편집
         /// </summary>
