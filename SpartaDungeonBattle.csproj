@@ -7,8 +7,5 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Include="C:\Users\jo\Desktop\Battle.cs" Link="Battle.cs" />
-  </ItemGroup>
 
 </Project>

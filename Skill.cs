@@ -32,7 +32,7 @@ namespace SpartaDungeonBattle
                     SkillDescription = "단일의 적에게 캐릭터의 MaxMP의 절반의 데미지를 가한다";
                     IsNeedTarget = true;
                     SkillToMonster += (Monster monster,Character character) => 
-                        {monster.HP -= character.MaxMP; if (monster.HP <= 0) monster.HP = 0; };
+                        { monster.HP -= character.MaxMP; };
                     break;
 
                 case SpartaDungeonBattle.SkillName.MULTISHOT:
@@ -42,10 +42,9 @@ namespace SpartaDungeonBattle
                     IsNeedTarget = false;
                     SkillToMonsters += (List<Monster> monsters, Character character) =>
                         {   
-                            foreach(var monster in monsters)
+                            foreach(Monster monster in monsters)
                             { 
                                monster.HP -= character.Attack; 
-                                if (monster.HP <= 0) monster.HP = 0;
                             }
                         };
                     break;
@@ -56,8 +55,8 @@ namespace SpartaDungeonBattle
                     SkillDescription = "단일의 적에게 캐릭터의 공격력의 2배의 데미지를 가한다";
                     IsNeedTarget = true;
                     SkillToMonster += (Monster monster, Character character) =>
-                        {   monster.HP -= character.Attack * 2; 
-                            if (monster.HP <= 0) monster.HP = 0; 
+                        {
+                            monster.HP -= character.Attack * 2; 
                         };
                     break;
 

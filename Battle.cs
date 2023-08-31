@@ -45,7 +45,7 @@ public class Battle
                 Process_PlayerAttack();
                 break;
             case BattlePhase.PLAYER_SKILL:
-
+                Process_PlayerSkill();
                 break;
             case BattlePhase.PLAYER_ITEM:
                 Process_PlayerItem();
@@ -140,6 +140,85 @@ public class Battle
         else _battlePhase = BattlePhase.MONSTER_ATTACK;
     }
 
+    private void Process_PlayerSkill()
+    {
+        while (true)
+        {
+            DisplayTop();
+            DisplayMonsters();
+            DisplayCharacterInfo();
+            Console.WriteLine("[스킬]");
+            Console.WriteLine("\n***    기술명    >>  소모 MP  >>    기술 설명  ***\n");
+            int n = 0;
+            Console.WriteLine($"{(++n).ToString()}. {Character.CurrentCharacter.MainSkill.SkillName}  >>  {Character.CurrentCharacter.MainSkill.Cost}   >>  {Character.CurrentCharacter.MainSkill.SkillDescription}");
+            Console.WriteLine();
+
+            Console.WriteLine("사용하려는 스킬의 번호를 입력해주세요.");
+            Console.WriteLine("0. 돌아가기\n");
+            Console.Write(">> ");
+
+            int input = StateManager.CheckValidInput(0, n) - 1;
+            if (input == -1)
+            {
+                _battlePhase = BattlePhase.PLAYER_BATTLE;
+                return;
+            }
+
+            if (Character.CurrentCharacter.MainSkill.IsNeedTarget == false)
+            {
+                DisplayTop();
+                // 몬스터 전체에게 스킬 사용
+                Character.CurrentCharacter.UseSkill(Monsters);
+                Console.WriteLine("\n0.다음\n");
+                Console.Write(">> ");
+                StateManager.CheckValidInput(0, 0);
+                if (isAllDead == true) _battlePhase = BattlePhase.BATTLE_END;
+                else _battlePhase = BattlePhase.MONSTER_ATTACK;
+                return;
+            }
+            else if (Character.CurrentCharacter.MainSkill.IsNeedTarget == true)
+            {
+                bool isSuccess = Process_SkillToMonster(Character.CurrentCharacter.MainSkill);
+                if (isSuccess)
+                {
+                    Console.WriteLine("\n0.다음\n");
+                    Console.Write(">> ");
+                    StateManager.CheckValidInput(0, 0);
+                    if (isAllDead == true) _battlePhase = BattlePhase.BATTLE_END;
+                    else _battlePhase = BattlePhase.MONSTER_ATTACK;
+                    break;
+                }
+            }
+        }
+    }
+
+    private bool Process_SkillToMonster(Skill skill)
+    {
+        DisplayTop();
+        DisplayMonsters(true);
+
+        // 몬스터에게 아이템 사용
+        Console.WriteLine("대상이 되는 몬스터의 번호를 입력해주세요.");
+        Console.WriteLine("0. 돌아가기\n");
+        Console.Write(">> ");
+
+        int input = -1;
+        while (true)
+        {
+            input = StateManager.CheckValidInput(0, Monsters.Count) - 1;
+            if (input == -1)
+                return false;
+
+            if (Monsters[input].isDead) Console.WriteLine("잘못된 입력입니다.");
+            else break;
+        }
+
+        DisplayTop();
+        Console.WriteLine($"{Character.CurrentCharacter.Name}은(는) {skill.SkillName}을(를) 사용했다!\n");
+        Character.CurrentCharacter.UseSkill(Monsters[input]);
+        return true;
+    }
+
     private void Process_PlayerItem()
     {
         while (true)
@@ -148,7 +227,7 @@ public class Battle
             DisplayMonsters();
             DisplayCharacterInfo();
             Console.WriteLine("[아이템 목록]");
-            Console.WriteLine("\n***아이템 이름  >>  능력치  >>  아이템 설명***\n");
+            Console.WriteLine("\n***아이템 이름  >>         아이템 설명     ***\n");
             int n = 0;
             List<Consumption> ItemList = new List<Consumption>();
             for (int i = 0; i < Character.CurrentCharacter.Inventory.Count; i++)
@@ -179,6 +258,7 @@ public class Battle
                 DisplayTop();
                 Console.WriteLine($"{Character.CurrentCharacter.Name}은(는) {ItemList[input].ItemName}을(를) 사용했다!\n");
                 ItemList[input].ItemFunc(Character.CurrentCharacter, null);
+                ItemList.RemoveAt(input);
 
                 Console.WriteLine("\n0.다음\n");
                 Console.Write(">> ");
@@ -191,6 +271,7 @@ public class Battle
                 bool isSuccess = Process_ItemToMonster(ItemList[input]);
                 if (isSuccess)
                 {
+                    ItemList.RemoveAt(input);
                     Console.WriteLine("\n0.다음\n");
                     Console.Write(">> ");
                     StateManager.CheckValidInput(0, 0);
