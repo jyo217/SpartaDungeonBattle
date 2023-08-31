@@ -152,16 +152,16 @@ namespace SpartaDungeonBattle
                         MP = MaxMP;
                         break;
                     }
-                case ClassType.CLERIC:
-                    {
-                        Attack = 8;
-                        Defense = 8;
-                        MaxHP = 80;
-                        HP = MaxHP;
-                        MaxMP = 70;
-                        MP = MaxMP;
-                        break;
-                    }
+                //case ClassType.CLERIC:
+                //    {
+                //        Attack = 8;
+                //        Defense = 8;
+                //        MaxHP = 80;
+                //        HP = MaxHP;
+                //        MaxMP = 70;
+                //        MP = MaxMP;
+                //        break;
+                //    }
             }
         }
         public bool NormalAttack(Monster monster)
@@ -178,15 +178,15 @@ namespace SpartaDungeonBattle
                                         (int)Math.Ceiling   (Attack * (1 + damageRangeMultiplier))
                                      );
             // 크리티컬 데미지 여부 판단 후 크리티컬 배율 반영
-            bool isCritAttack;
+            bool isCritAttack=false;
             if (random.Next(1, 101) <= critRate * 100)
             {
                 damage = (int)(damage * critMultiplier);
-                isCritAttack = false;
+                isCritAttack = true;
             }
             else
             {
-                isCritAttack = true;
+                isCritAttack = false;
             }
 
             Console.WriteLine($"{Name} 의 공격!");
@@ -235,8 +235,8 @@ namespace SpartaDungeonBattle
                     return "궁수";
                 case ClassType.MAGICIAN:
                     return "마법사";
-                case ClassType.CLERIC:
-                    return "클레릭";
+                //case ClassType.CLERIC:
+                //    return "클레릭";
                 default:
                     return "";
             }
@@ -255,7 +255,7 @@ namespace SpartaDungeonBattle
         WARRIOR = 1,
         ARCHER,
         MAGICIAN,
-        CLERIC
+        //CLERIC
     }
 
     public enum AttackType
