@@ -59,9 +59,9 @@ namespace SpartaDungeonBattle
             Target = target;
         }
 
-        public static Consumption MakePotion()
+        public static Consumption MakeRedPotion()
         {
-            Consumption potion = new Consumption("붉은 포션 ", 20, "HP를 20 회복시킵니다.", ItemTarget.ToCharacter);
+            Consumption potion = new Consumption("붉은 포션", 20, "HP를 20 회복시킵니다.", ItemTarget.ToCharacter);
             potion.ItemToCharacter += (Character character) => { character.HP += 20; if (character.HP > character.MaxHP) character.HP = character.MaxHP; };
             return potion;
         }
@@ -70,6 +70,7 @@ namespace SpartaDungeonBattle
         {
             Consumption potion = new Consumption("파란 포션 ", 20, "MP를 20 회복시킵니다.", ItemTarget.ToCharacter);
             potion.ItemToCharacter += (Character character) => { character.MP += 20; if (character.MP > character.MaxMP) character.MP = character.MaxMP; };
+
             return potion;
         }
     }
