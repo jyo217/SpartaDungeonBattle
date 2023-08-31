@@ -192,11 +192,11 @@ public class Battle
             int earnedMpPotion = potionDrop > 1 ? 1 : 0;
             string earnedPotionMsg = "포션 획득! : ";
 
-            if (earnedHpPotion > 0) { earnedPotionMsg += $"{Consumption.MakePotion().ItemName} X {earnedHpPotion}   ,   "; }
-            for (int i = 0; i < earnedHpPotion; i++) { character.Inventory.ItemList.Add(Consumption.MakePotion()); }//HP 포션 인벤토리에 추가
+            if (earnedHpPotion > 0) { earnedPotionMsg += $"{Consumption.MakeRedPotion().ItemName} X {earnedHpPotion}   ,   "; }
+            for (int i = 0; i < earnedHpPotion; i++) { character.Inventory.ItemList.Add(Consumption.MakeRedPotion()); }//HP 포션 인벤토리에 추가
            
-            if (earnedMpPotion > 0) { earnedPotionMsg += $"{Consumption.MakeMpPotion().ItemName} X {earnedMpPotion}   "; }
-            for (int i = 0; i < earnedMpPotion; i++) { character.Inventory.ItemList.Add(Consumption.MakeMpPotion()); }//MP 포션 인벤토리에 추가
+            if (earnedMpPotion > 0) { earnedPotionMsg += $"{Consumption.MakeBluePotion().ItemName} X {earnedHpPotion}   "; }
+            for (int i = 0; i < earnedMpPotion; i++) { character.Inventory.ItemList.Add(Consumption.MakeBluePotion()); }//MP 포션 인벤토리에 추가
 
             Console.WriteLine(earnedPotionMsg);
 
