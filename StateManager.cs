@@ -256,7 +256,7 @@ public static class StateManager
                 //해당 장비 아이템의 인덱스 저장
                 items.Add(i);
                 //번호
-                itemInfo += $"{i + 1}. ";
+                itemInfo += $"{items.Count}. ";
 
                 e = Character.CurrentCharacter.Inventory.ItemList[i] as Equipment;
 
