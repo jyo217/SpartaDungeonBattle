@@ -248,6 +248,15 @@ namespace SpartaDungeonBattle
             Name = nickname;
             return true;
         }
+
+        /// <summary>
+        /// 골드 증감 메소드
+        /// </summary>
+        /// <param name="gold">획득/잃은 골드</param>
+        public void EarnGold(int gold)
+        {
+            this.Gold += gold;
+        }
     }
 
     public enum ClassType
