@@ -182,11 +182,11 @@ namespace SpartaDungeonBattle
             if (random.Next(1, 101) <= critRate * 100)
             {
                 damage = (int)(damage * critMultiplier);
-                isCritAttack = true;
+                isCritAttack = false;
             }
             else
             {
-                isCritAttack = false;
+                isCritAttack = true;
             }
 
             Console.WriteLine($"{Name} 의 공격!");
