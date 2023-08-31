@@ -27,6 +27,7 @@ namespace SpartaDungeonBattle
                 int previousHP = _hp;
                 _hp = value;
                 if (_hp < 0) _hp = 0;
+                else if (_hp > MaxHP) _hp = MaxHP;
                 HPChangedCallback?.Invoke(previousHP, _hp);
             }
         }
@@ -42,6 +43,7 @@ namespace SpartaDungeonBattle
                 int previousMP = _mp;
                 _mp = value;
                 if (_mp < 0) _mp = 0;
+                else if (_hp <= MaxMP) _mp = MaxMP;
                 MPChangedCallback?.Invoke(previousMP, _mp);
             }
         }
