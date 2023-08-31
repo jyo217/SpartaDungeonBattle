@@ -43,7 +43,7 @@ namespace SpartaDungeonBattle
                 int previousMP = _mp;
                 _mp = value;
                 if (_mp < 0) _mp = 0;
-                else if (_hp <= MaxMP) _mp = MaxMP;
+                else if (_mp <= MaxMP) _mp = MaxMP;
                 MPChangedCallback?.Invoke(previousMP, _mp);
             }
         }
@@ -75,16 +75,18 @@ namespace SpartaDungeonBattle
             MPChangedCallback = (previousMP, postMP) =>
             {
                 Console.WriteLine($"Lv.{Level} {Name}");
-                Console.WriteLine($"HP {previousMP} -> {(postMP > 0 ? postMP : "Dead\n")}");
+                Console.WriteLine($"MP {previousMP} -> {(postMP > 0 ? postMP : "Dead\n")}");
             };
         }
 
         public void UseSkill(Monster monster)
         {
+            MP -= MainSkill.Cost;
             MainSkill.SkillToMonster?.Invoke(monster, this);
         }
         public void UseSkill(List<Monster> monsters)
         {
+            MP -= MainSkill.Cost;
             MainSkill.SkillToMonsters?.Invoke(monsters, this);
         }
 
