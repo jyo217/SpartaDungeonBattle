@@ -285,8 +285,8 @@ public class Battle
             if (earnedHpPotion > 0) { earnedPotionMsg += $"{Consumption.MakeHpPotion().ItemName} X {earnedHpPotion}   ,   "; }
             for (int i = 0; i < earnedHpPotion; i++) { character.Inventory.ItemList.Add(Consumption.MakeHpPotion()); }//HP 포션 인벤토리에 추가
            
-            if (earnedMpPotion > 0) { earnedPotionMsg += $"{Consumption.MakeBluePotion().ItemName} X {earnedHpPotion}   "; }
-            for (int i = 0; i < earnedMpPotion; i++) { character.Inventory.ItemList.Add(Consumption.MakeBluePotion()); }//MP 포션 인벤토리에 추가
+            if (earnedMpPotion > 0) { earnedPotionMsg += $"{Consumption.MakeMpPotion().ItemName} X {earnedHpPotion}   "; }
+            for (int i = 0; i < earnedMpPotion; i++) { character.Inventory.ItemList.Add(Consumption.MakeMpPotion()); }//MP 포션 인벤토리에 추가
 
             Console.WriteLine(earnedPotionMsg);
 
