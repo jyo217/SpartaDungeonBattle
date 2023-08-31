@@ -282,27 +282,31 @@ public class Battle
             int earnedMpPotion = potionDrop > 1 ? 1 : 0;
             string earnedPotionMsg = "포션 획득! : ";
 
-            if (earnedHpPotion > 0) { earnedPotionMsg += $"{Consumption.MakeHpPotion().ItemName} X {earnedHpPotion}   ,   "; }
+            if (earnedHpPotion > 0) { earnedPotionMsg += $"{Consumption.MakeHpPotion().ItemName} X {earnedHpPotion}   "; }
             for (int i = 0; i < earnedHpPotion; i++) { character.Inventory.ItemList.Add(Consumption.MakeHpPotion()); }//HP 포션 인벤토리에 추가
            
-            if (earnedMpPotion > 0) { earnedPotionMsg += $"{Consumption.MakeBluePotion().ItemName} X {earnedHpPotion}   "; }
-            for (int i = 0; i < earnedMpPotion; i++) { character.Inventory.ItemList.Add(Consumption.MakeBluePotion()); }//MP 포션 인벤토리에 추가
-
-            Console.WriteLine(earnedPotionMsg);
-
-            //장비 획득. 장비 드랍 랜덤값에 따라 해당 장비를 인벤토리에 추가, 획득 메시지 출력
-            int equipmentDrop = random.Next(0, 5);
-            
-            /*
-            string earnedEquipmentMsg = "장비 획득! : ";
-            if (earnedHpPotion > 0) { earnedPotionMsg += $"{Consumption.MakeHpPotion().ItemName} X {earnedHpPotion}   ,   "; }
-            for (int i = 0; i < earnedHpPotion; i++) { character.Inventory.ItemList.Add(Consumption.MakeHpPotion()); }//HP 포션 인벤토리에 추가
-
-            if (earnedMpPotion > 0) { earnedPotionMsg += $"{Consumption.MakeMpPotion().ItemName} X {earnedMpPotion}   "; }
+            if (earnedMpPotion > 0) { earnedPotionMsg += $"{Consumption.MakeMpPotion().ItemName} X {earnedHpPotion}   "; }
             for (int i = 0; i < earnedMpPotion; i++) { character.Inventory.ItemList.Add(Consumption.MakeMpPotion()); }//MP 포션 인벤토리에 추가
 
-            Console.WriteLine(earnedPotionMsg);
-            */
+            if(earnedHpPotion > 0 || earnedMpPotion > 0){Console.WriteLine(earnedPotionMsg);}//획득한 포션이 존재한다면 메시지 출력
+
+            //장비 획득. 장비 드랍 랜덤값에 따라 해당 장비를 인벤토리에 추가, 획득 메시지 출력
+            Equipment broken_straight_sword = new Equipment("부러진 직검  ", 10, "정상인이라면 이것을 무기로 사용하지 않으려 할 것입니다.", 1, 0);
+            Equipment fundoshi = new Equipment("낡은 치부가리개?", 5, "속옷 '이었던 것' 으로 추정됩니다. 낡았고, 냄새가 나는 것만 같습니다.", 0, 1);
+            Equipment fined_sword = new Equipment("쓸만한 검", 500, "쓸만해 보이지만, 어딘가 만듦새가 아쉬워 보입니다.", 5, 0);
+            Equipment chain_male = new Equipment("사슬 갑옷", 350, "작은 사슬을 엮어 만든 갑옷. 생각보다 상태가 양호한 것 같습니다.", 5, 0);
+            Equipment Excution = new Equipment("집행", 10000, "투박해 보이는 방패? 로 추정됩니다. 예사롭지 않은 기운이 흘러나옵니다. 도대체 왜 이런 곳에...?", 50, 30);
+            
+            //0~5 면 드랍 없음, 6~15 부러진 직검, 10~23 낡은 치부가리개, 20~25 사슬 갑옷, 25~28 쓸만한 검, 29 집행
+            int equipmentDrop = random.Next(0, 30);
+            string earnedEquipmentMsg = "장비 획득! : ";
+            if (equipmentDrop >= 6 && equipmentDrop <= 15) { character.Inventory.ItemList.Add(broken_straight_sword); earnedEquipmentMsg += $"{broken_straight_sword.ItemName}   "; }
+            else if (equipmentDrop >= 10 && equipmentDrop <= 23) { character.Inventory.ItemList.Add(fundoshi); earnedEquipmentMsg += $"{fundoshi.ItemName}   "; }
+            else if (equipmentDrop >= 20 && equipmentDrop <= 25) { character.Inventory.ItemList.Add(chain_male); earnedEquipmentMsg += $"{chain_male.ItemName}   "; }
+            else if (equipmentDrop >= 25 && equipmentDrop <= 28) { character.Inventory.ItemList.Add(fined_sword); earnedEquipmentMsg += $"{fined_sword.ItemName}   "; }
+            else if(equipmentDrop >= 29) { character.Inventory.ItemList.Add(Excution); earnedEquipmentMsg += $"{Excution.ItemName}   "; }
+
+            if (equipmentDrop <= 5) { Console.WriteLine(earnedEquipmentMsg); }
         }
         else // 패배한 경우
         {
