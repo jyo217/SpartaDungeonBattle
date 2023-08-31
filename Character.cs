@@ -60,7 +60,9 @@ namespace SpartaDungeonBattle
             };
         }
 
-        public void UseSkill(Skill skill) { }
+        public void UseSkill()
+        { 
+        }
 
         public void UseItem(Consumption consumption) { }
 
