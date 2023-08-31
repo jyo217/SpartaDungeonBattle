@@ -27,14 +27,28 @@ namespace SpartaDungeonBattle
                 int previousHP = _hp;
                 _hp = value;
                 if (_hp < 0) _hp = 0;
-                HealthChangedCallback?.Invoke(previousHP, _hp);
+                else if (_hp > MaxHP) _hp = MaxHP;
+                HPChangedCallback?.Invoke(previousHP, _hp);
             }
         }
-        public Action<int, int> HealthChangedCallback { get; set; }
+        public Action<int, int> HPChangedCallback { get; set; }
         public bool isDead { get { return HP <= 0; } }
         public int MaxHP { get; private set; }
-        public int MP { get; set; }
+        private int _mp;
+        public int MP
+        {
+            get { return _mp; }
+            set
+            {
+                int previousMP = _mp;
+                _mp = value;
+                if (_mp < 0) _mp = 0;
+                else if (_hp <= MaxMP) _mp = MaxMP;
+                MPChangedCallback?.Invoke(previousMP, _mp);
+            }
+        }
         public int MaxMP { get; private set; }
+        public Action<int, int> MPChangedCallback { get; set; }
         public int Gold { get; private set; }
         public int Exp { get; private set; }
         public Inventory Inventory { get; private set; }
@@ -53,10 +67,15 @@ namespace SpartaDungeonBattle
             Exp = 0;
             Inventory = new Inventory();
             ItemOnEquipped = new List<Equipment>();
-            HealthChangedCallback = (previousHP, postHP) =>
+            HPChangedCallback = (previousHP, postHP) =>
             {
                 Console.WriteLine($"Lv.{Level} {Name}");
                 Console.WriteLine($"HP {previousHP} -> {(postHP > 0 ? postHP : "Dead\n")}");
+            };
+            MPChangedCallback = (previousMP, postMP) =>
+            {
+                Console.WriteLine($"Lv.{Level} {Name}");
+                Console.WriteLine($"HP {previousMP} -> {(postMP > 0 ? postMP : "Dead\n")}");
             };
         }
 
@@ -252,6 +271,15 @@ namespace SpartaDungeonBattle
             if (nickname == "") return false;
             Name = nickname;
             return true;
+        }
+
+        /// <summary>
+        /// 골드 증감 메소드
+        /// </summary>
+        /// <param name="gold">획득/잃은 골드</param>
+        public void EarnGold(int gold)
+        {
+            this.Gold += gold;
         }
     }
 
