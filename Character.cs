@@ -81,11 +81,11 @@ namespace SpartaDungeonBattle
 
         public void UseSkill(Monster monster)
         {
-//            MainSkill.SkillToMonster?.Invoke(monster, this);
+            MainSkill.SkillToMonster?.Invoke(monster, this);
         }
         public void UseSkill(List<Monster> monsters)
         {
-//            MainSkill.SkillToMonsters?.Invoke(monsters, this);
+            MainSkill.SkillToMonsters?.Invoke(monsters, this);
         }
 
         public void UseItem(Consumption consumption) { }

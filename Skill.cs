@@ -15,8 +15,8 @@ namespace SpartaDungeonBattle
         public string SkillDescription { get; private set; }
 
         public bool IsNeedTarget { get; private set; }
-        Action<List<Monster>, Character>? SkillToMonsters;
-        Action<Monster, Character>? SkillToMonster;
+        public Action<List<Monster>, Character>? SkillToMonsters;
+        public Action<Monster, Character>? SkillToMonster;
 
         /// <summary>
         /// 필요에 따라 편집
