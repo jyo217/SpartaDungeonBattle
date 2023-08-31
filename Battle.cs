@@ -306,7 +306,7 @@ public class Battle
             else if (equipmentDrop >= 25 && equipmentDrop <= 28) { character.Inventory.ItemList.Add(fined_sword); earnedEquipmentMsg += $"{fined_sword.ItemName}   "; }
             else if(equipmentDrop >= 29) { character.Inventory.ItemList.Add(Excution); earnedEquipmentMsg += $"{Excution.ItemName}   "; }
 
-            if (equipmentDrop <= 5) { Console.WriteLine(earnedEquipmentMsg); }
+            if (equipmentDrop >= 6) { Console.WriteLine(earnedEquipmentMsg); }
         }
         else // 패배한 경우
         {
