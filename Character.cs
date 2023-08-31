@@ -43,7 +43,7 @@ namespace SpartaDungeonBattle
                 int previousMP = _mp;
                 _mp = value;
                 if (_mp < 0) _mp = 0;
-                else if (_mp <= MaxMP) _mp = MaxMP;
+                else if (_mp > MaxMP) _mp = MaxMP;
                 MPChangedCallback?.Invoke(previousMP, _mp);
             }
         }
