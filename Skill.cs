@@ -44,7 +44,7 @@ namespace SpartaDungeonBattle
                         {   
                             foreach(Monster monster in monsters)
                             { 
-                               monster.HP -= character.Attack; 
+                               if (monster.isDead == false) monster.HP -= character.Attack; 
                             }
                         };
                     break;
