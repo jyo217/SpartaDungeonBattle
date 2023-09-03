@@ -258,7 +258,7 @@ public class Battle
                 DisplayTop();
                 Console.WriteLine($"{Character.CurrentCharacter.Name}은(는) {ItemList[input].ItemName}을(를) 사용했다!\n");
                 ItemList[input].ItemFunc(Character.CurrentCharacter, null);
-                ItemList.RemoveAt(input);
+                Character.CurrentCharacter.Inventory.ItemList.Remove((Item)ItemList[input]);
 
                 Console.WriteLine("\n0.다음\n");
                 Console.Write(">> ");
@@ -271,7 +271,7 @@ public class Battle
                 bool isSuccess = Process_ItemToMonster(ItemList[input]);
                 if (isSuccess)
                 {
-                    ItemList.RemoveAt(input);
+                    Character.CurrentCharacter.Inventory.ItemList.Remove((Item)ItemList[input]);
                     Console.WriteLine("\n0.다음\n");
                     Console.Write(">> ");
                     StateManager.CheckValidInput(0, 0);
